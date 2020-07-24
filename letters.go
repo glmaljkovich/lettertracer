@@ -265,9 +265,9 @@ func (g *Game) transitionLetter() {
 		transitioning = true
 		animationTimer = animationDuration
 		letterPlayer.Rewind()
-	} else if animationTimer > animationDuration/2 {
 		// play letter pronunciation
 		letterPlayer.Play()
+	} else if animationTimer > animationDuration/2 {
 		animationTimer -= 60
 	} else if animationTimer > 0 {
 		fadeOut()
