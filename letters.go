@@ -188,8 +188,6 @@ func init() {
 }
 
 func clearPreviousPointerState() {
-	// stop the pencil sound
-	drawPlayer.Pause()
 	// reset the pointerOverlay
 	// when the image is drawn several times this is more performant than calling Clear()
 	logErrorAndExit(pointerOverlay.Dispose())
@@ -218,6 +216,8 @@ func (g *Game) Update(screen *ebiten.Image) error {
 
 	// Reset the pencil sound if we stopped moving
 	if !drawn {
+		// stop the pencil sound
+		drawPlayer.Pause()
 		drawPlayer.Rewind()
 	}
 
@@ -358,7 +358,9 @@ func (g *Game) paint(canvas *ebiten.Image, x, y int) {
 	// track progress
 	if insideLetter(x, y) {
 		g.removeLetterPixels(x, y)
-		drawPlayer.Play()
+		if !drawPlayer.IsPlaying() {
+			drawPlayer.Play()
+		}
 		g.count++
 	}
 }
