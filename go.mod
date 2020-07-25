@@ -1,4 +1,4 @@
-module github.com/SemanticSugar/hackweek2020h1/go/letters
+module github.com/glmaljkovich/lettertracer
 
 go 1.14
 

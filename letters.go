@@ -92,6 +92,7 @@ var (
 	animationOverlay *ebiten.Image
 	pointerImage     *ebiten.Image
 	debugImage       *ebiten.Image
+	sweep            *ebiten.Image
 )
 
 // Sounds
@@ -148,6 +149,8 @@ func loadImages() {
 	animationOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
 	logErrorAndExit(err)
 	debugImage, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
+	logErrorAndExit(err)
+	sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
 	logErrorAndExit(err)
 }
 
@@ -300,7 +303,9 @@ func (g *Game) loadRandomLetter() {
 // fadeOut draws an overlay with the color of the letter background
 // and opacity increasing from 0 to 1
 func fadeOut() {
-	sweep, err := ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
+	logErrorAndExit(sweep.Dispose())
+	var err error
+	sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
 	logErrorAndExit(err)
 	ccolor := letterOverlay.At(0, 0).(color.RGBA)
 	sweep.Fill(ccolor)
