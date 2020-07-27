@@ -193,10 +193,11 @@ func init() {
 func clearPreviousPointerState() {
 	// reset the pointerOverlay
 	// when the image is drawn several times this is more performant than calling Clear()
-	logErrorAndExit(pointerOverlay.Dispose())
-	var err error
-	pointerOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
-	logErrorAndExit(err)
+	// logErrorAndExit(pointerOverlay.Dispose())
+	// var err error
+	// pointerOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
+	// logErrorAndExit(err)
+	pointerOverlay.Clear()
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
@@ -260,10 +261,11 @@ func (g *Game) paintByTouches(screen *ebiten.Image) bool {
 }
 
 func (g *Game) transitionLetter() {
-	logErrorAndExit(animationOverlay.Dispose())
-	var err error
-	animationOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
-	logErrorAndExit(err)
+	// logErrorAndExit(animationOverlay.Dispose())
+	// var err error
+	// animationOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
+	// logErrorAndExit(err)
+	animationOverlay.Clear()
 	if !transitioning {
 		transitioning = true
 		animationTimer = animationDuration
