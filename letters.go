@@ -305,10 +305,11 @@ func (g *Game) loadRandomLetter() {
 // fadeOut draws an overlay with the color of the letter background
 // and opacity increasing from 0 to 1
 func fadeOut() {
-	logErrorAndExit(sweep.Dispose())
-	var err error
-	sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
-	logErrorAndExit(err)
+	// logErrorAndExit(sweep.Dispose())
+	// var err error
+	// sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
+	// logErrorAndExit(err)
+	sweep.Clear()
 	ccolor := letterOverlay.At(0, 0).(color.RGBA)
 	sweep.Fill(ccolor)
 	op := &ebiten.DrawImageOptions{}
