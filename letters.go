@@ -10,6 +10,8 @@ import (
 	"math/rand"
 	"time"
 
+	"github.com/glmaljkovich/lettertracer/assets"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/audio"
 	"github.com/hajimehoshi/ebiten/audio/mp3"
@@ -24,64 +26,6 @@ const (
 	sampleRate        = 44100
 	animationDuration = 3200
 )
-
-var letters = []string{
-	"./assets/img/a.png",
-	"./assets/img/b.png",
-	"./assets/img/c.png",
-	"./assets/img/d.png",
-	"./assets/img/e.png",
-	"./assets/img/f.png",
-	"./assets/img/g.png",
-	"./assets/img/h.png",
-	"./assets/img/i.png",
-	"./assets/img/j.png",
-	"./assets/img/k.png",
-	"./assets/img/l.png",
-	"./assets/img/m.png",
-	"./assets/img/n.png",
-	"./assets/img/o.png",
-	"./assets/img/p.png",
-	"./assets/img/q.png",
-	"./assets/img/r.png",
-	"./assets/img/s.png",
-	"./assets/img/t.png",
-	"./assets/img/u.png",
-	"./assets/img/v.png",
-	"./assets/img/w.png",
-	"./assets/img/x.png",
-	"./assets/img/y.png",
-	"./assets/img/z.png",
-}
-
-var soundFiles = []string{
-	"./assets/audio/letters/a.mp3",
-	"./assets/audio/letters/b.mp3",
-	"./assets/audio/letters/c.mp3",
-	"./assets/audio/letters/d.mp3",
-	"./assets/audio/letters/e.mp3",
-	"./assets/audio/letters/f.mp3",
-	"./assets/audio/letters/g.mp3",
-	"./assets/audio/letters/h.mp3",
-	"./assets/audio/letters/i.mp3",
-	"./assets/audio/letters/j.mp3",
-	"./assets/audio/letters/k.mp3",
-	"./assets/audio/letters/l.mp3",
-	"./assets/audio/letters/m.mp3",
-	"./assets/audio/letters/n.mp3",
-	"./assets/audio/letters/o.mp3",
-	"./assets/audio/letters/p.mp3",
-	"./assets/audio/letters/q.mp3",
-	"./assets/audio/letters/r.mp3",
-	"./assets/audio/letters/s.mp3",
-	"./assets/audio/letters/t.mp3",
-	"./assets/audio/letters/u.mp3",
-	"./assets/audio/letters/v.mp3",
-	"./assets/audio/letters/w.mp3",
-	"./assets/audio/letters/x.mp3",
-	"./assets/audio/letters/y.mp3",
-	"./assets/audio/letters/z.mp3",
-}
 
 // Images
 var (
@@ -179,8 +123,8 @@ func loadAudios() {
 	logErrorAndExit(err)
 
 	// load letter sounds
-	for i := range soundFiles {
-		letterSounds = append(letterSounds, loadAudio(soundFiles[i]))
+	for i := range assets.SoundFiles {
+		letterSounds = append(letterSounds, loadAudio(assets.SoundFiles[i]))
 	}
 	letterPlayer = letterSounds[0]
 }
@@ -284,8 +228,8 @@ func (g *Game) transitionLetter() {
 }
 
 func (g *Game) loadRandomLetter() {
-	g.currentLetter = rand.Intn(len(letters))
-	letter := letters[g.currentLetter]
+	g.currentLetter = rand.Intn(len(assets.Letters))
+	letter := assets.Letters[g.currentLetter]
 	logErrorAndExit(letterOverlay.Dispose())
 	var err error
 	letterOverlay, _, err = ebitenutil.NewImageFromFile(letter, ebiten.FilterDefault)
