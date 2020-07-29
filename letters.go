@@ -240,15 +240,15 @@ func (g *Game) transitionLetter() {
 
 func (g *Game) loadRandomLetter() {
 	g.currentLetter = rand.Intn(len(assets.Letters))
-	letter := assets.Letters[g.currentLetter]
-	logErrorAndExit(letterOverlay.Dispose())
-	var err error
-	letterOverlay, _, err = ebitenutil.NewImageFromFile(letter, ebiten.FilterDefault)
-	logErrorAndExit(err)
-	// This avoids a memory leak on desktop caused by unused images being kept in memory
-	logErrorAndExit(canvasImage.Dispose())
-	canvasImage, _, err = ebitenutil.NewImageFromFile("./assets/img/sandpaper.jpg", ebiten.FilterDefault)
-	logErrorAndExit(err)
+	// letter := assets.Letters[g.currentLetter]
+	// logErrorAndExit(letterOverlay.Dispose())
+	// var err error
+	// letterOverlay, _, err = ebitenutil.NewImageFromFile(letter, ebiten.FilterDefault)
+	// logErrorAndExit(err)
+	// // This avoids a memory leak on desktop caused by unused images being kept in memory
+	// logErrorAndExit(canvasImage.Dispose())
+	// canvasImage, _, err = ebitenutil.NewImageFromFile("./assets/img/sandpaper.jpg", ebiten.FilterDefault)
+	// logErrorAndExit(err)
 	if letterPlayer.IsPlaying() {
 		letterPlayer.Rewind()
 		letterPlayer.Pause()
