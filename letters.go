@@ -99,12 +99,13 @@ func loadImages() {
 }
 
 func loadAudio(src string) *audio.Player {
+	audioContexto, _ := audio.NewContext(sampleRate)
 	file, err := ebitenutil.OpenFile(src)
 	logErrorAndExit(err)
 
-	sound, err := mp3.Decode(audioContext, file)
+	sound, err := mp3.Decode(audioContexto, file)
 	logErrorAndExit(err)
-	player, err := audio.NewPlayer(audioContext, sound)
+	player, err := audio.NewPlayer(audioContexto, sound)
 	logErrorAndExit(err)
 	return player
 }
