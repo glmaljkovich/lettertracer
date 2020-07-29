@@ -98,9 +98,8 @@ func loadImages() {
 	logErrorAndExit(err)
 }
 
-func loadAudio(src string) *audio.Player {
-	file, err := ebitenutil.OpenFile(src)
-	logErrorAndExit(err)
+func loadAudio(src []byte) *audio.Player {
+	file := audio.BytesReadSeekCloser(src)
 
 	sound, err := mp3.Decode(audioContext, file)
 	logErrorAndExit(err)
@@ -144,7 +143,7 @@ func clearPreviousPointerState() {
 	// pointerOverlay.Clear()
 }
 
-func (g *Game) Updateo(screen *ebiten.Image) error {
+func (g *Game) Update(screen *ebiten.Image) error {
 	drawn := false
 	if letterJustLoaded {
 		g.letterPixels = getPixelsInLetter(letterOverlay)
@@ -179,15 +178,6 @@ func (g *Game) Updateo(screen *ebiten.Image) error {
 	// Show debug view with 'D'
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
 		debugMode = !debugMode
-	}
-
-	return nil
-}
-
-func (g *Game) Update(screen *ebiten.Image) error {
-	letterPlayer.Play()
-	if len(ebiten.TouchIDs()) > 0 {
-		g.loadRandomLetter()
 	}
 
 	return nil
@@ -240,15 +230,15 @@ func (g *Game) transitionLetter() {
 
 func (g *Game) loadRandomLetter() {
 	g.currentLetter = rand.Intn(len(assets.Letters))
-	// letter := assets.Letters[g.currentLetter]
-	// logErrorAndExit(letterOverlay.Dispose())
-	// var err error
-	// letterOverlay, _, err = ebitenutil.NewImageFromFile(letter, ebiten.FilterDefault)
-	// logErrorAndExit(err)
-	// // This avoids a memory leak on desktop caused by unused images being kept in memory
-	// logErrorAndExit(canvasImage.Dispose())
-	// canvasImage, _, err = ebitenutil.NewImageFromFile("./assets/img/sandpaper.jpg", ebiten.FilterDefault)
-	// logErrorAndExit(err)
+	letter := assets.Letters[g.currentLetter]
+	logErrorAndExit(letterOverlay.Dispose())
+	var err error
+	letterOverlay, _, err = ebitenutil.NewImageFromFile(letter, ebiten.FilterDefault)
+	logErrorAndExit(err)
+	// This avoids a memory leak on desktop caused by unused images being kept in memory
+	logErrorAndExit(canvasImage.Dispose())
+	canvasImage, _, err = ebitenutil.NewImageFromFile("./assets/img/sandpaper.jpg", ebiten.FilterDefault)
+	logErrorAndExit(err)
 	if letterPlayer.IsPlaying() {
 		letterPlayer.Rewind()
 		letterPlayer.Pause()

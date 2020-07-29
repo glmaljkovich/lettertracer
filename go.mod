@@ -6,6 +6,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
 	github.com/hajimehoshi/ebiten v1.11.4
+	github.com/hajimehoshi/file2byteslice v0.0.0-20190607115218-790acb50cc61 // indirect
 	github.com/hajimehoshi/wasmserve v0.0.0-20200526111629-585d78f6b795 // indirect
 	github.com/neelance/astrewrite v0.0.0-20160511093645-99348263ae86 // indirect
 	github.com/neelance/sourcemap v0.0.0-20200213170602-2833bce08e4c // indirect
