@@ -99,13 +99,12 @@ func loadImages() {
 }
 
 func loadAudio(src string) *audio.Player {
-	audioContexto, _ := audio.NewContext(sampleRate)
 	file, err := ebitenutil.OpenFile(src)
 	logErrorAndExit(err)
 
-	sound, err := mp3.Decode(audioContexto, file)
+	sound, err := mp3.Decode(audioContext, file)
 	logErrorAndExit(err)
-	player, err := audio.NewPlayer(audioContexto, sound)
+	player, err := audio.NewPlayer(audioContext, sound)
 	logErrorAndExit(err)
 	return player
 }
@@ -145,7 +144,7 @@ func clearPreviousPointerState() {
 	// pointerOverlay.Clear()
 }
 
-func (g *Game) Update(screen *ebiten.Image) error {
+func (g *Game) Updateo(screen *ebiten.Image) error {
 	drawn := false
 	if letterJustLoaded {
 		g.letterPixels = getPixelsInLetter(letterOverlay)
@@ -180,6 +179,15 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	// Show debug view with 'D'
 	if ebiten.IsKeyPressed(ebiten.KeyD) {
 		debugMode = !debugMode
+	}
+
+	return nil
+}
+
+func (g *Game) Update(screen *ebiten.Image) error {
+	letterPlayer.Play()
+	if len(ebiten.TouchIDs()) > 0 {
+		g.loadRandomLetter()
 	}
 
 	return nil
@@ -241,8 +249,10 @@ func (g *Game) loadRandomLetter() {
 	logErrorAndExit(canvasImage.Dispose())
 	canvasImage, _, err = ebitenutil.NewImageFromFile("./assets/img/sandpaper.jpg", ebiten.FilterDefault)
 	logErrorAndExit(err)
-	letterPlayer.Rewind()
-	letterPlayer.Pause()
+	if letterPlayer.IsPlaying() {
+		letterPlayer.Rewind()
+		letterPlayer.Pause()
+	}
 	letterPlayer = letterSounds[g.currentLetter]
 	// play letter pronunciation on load
 	letterPlayer.Play()
