@@ -37,6 +37,7 @@ var (
 	pointerImage     *ebiten.Image
 	debugImage       *ebiten.Image
 	sweep            *ebiten.Image
+	screenio         *ebiten.Image
 )
 
 // Sounds
@@ -95,6 +96,8 @@ func loadImages() {
 	debugImage, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
 	logErrorAndExit(err)
 	sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
+	logErrorAndExit(err)
+	screenio, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
 	logErrorAndExit(err)
 }
 
@@ -219,7 +222,7 @@ func (g *Game) transitionLetter() {
 	} else if animationTimer > animationDuration/2 {
 		animationTimer -= 60
 	} else if animationTimer > 0 {
-		fadeOut()
+		// fadeOut()
 		animationTimer -= 60
 	} else {
 		transitioning = false
@@ -355,10 +358,11 @@ func (g *Game) renderDebugScreen(screen *ebiten.Image) {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	screen.DrawImage(canvasImage, nil)
-	screen.DrawImage(letterOverlay, nil)
-	screen.DrawImage(animationOverlay, nil)
-	screen.DrawImage(pointerOverlay, nil)
+	screenio.DrawImage(canvasImage, nil)
+	screenio.DrawImage(letterOverlay, nil)
+	screenio.DrawImage(animationOverlay, nil)
+	screenio.DrawImage(pointerOverlay, nil)
+	screen.DrawImage(screenio, nil)
 	if debugMode {
 		g.renderDebugScreen(screen)
 	}
