@@ -37,7 +37,6 @@ var (
 	pointerImage     *ebiten.Image
 	debugImage       *ebiten.Image
 	sweep            *ebiten.Image
-	screenio         *ebiten.Image
 )
 
 // Sounds
@@ -97,8 +96,6 @@ func loadImages() {
 	logErrorAndExit(err)
 	sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
 	logErrorAndExit(err)
-	screenio, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
-	logErrorAndExit(err)
 }
 
 func loadAudio(src string) *audio.Player {
@@ -140,11 +137,11 @@ func init() {
 func clearPreviousPointerState() {
 	// reset the pointerOverlay
 	// when the image is drawn several times this is more performant than calling Clear()
-	// logErrorAndExit(pointerOverlay.Dispose())
-	// var err error
-	// pointerOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
-	// logErrorAndExit(err)
-	pointerOverlay.Clear()
+	logErrorAndExit(pointerOverlay.Dispose())
+	var err error
+	pointerOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
+	logErrorAndExit(err)
+	// pointerOverlay.Clear()
 }
 
 func (g *Game) Update(screen *ebiten.Image) error {
@@ -168,8 +165,10 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	// Reset the pencil sound if we stopped moving
 	if !drawn {
 		// stop the pencil sound
-		drawPlayer.Pause()
-		drawPlayer.Rewind()
+		if drawPlayer.IsPlaying() {
+			drawPlayer.Pause()
+			drawPlayer.Rewind()
+		}
 	}
 
 	// finished painting letter
@@ -208,11 +207,11 @@ func (g *Game) paintByTouches(screen *ebiten.Image) bool {
 }
 
 func (g *Game) transitionLetter() {
-	// logErrorAndExit(animationOverlay.Dispose())
-	// var err error
-	// animationOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
-	// logErrorAndExit(err)
-	animationOverlay.Clear()
+	logErrorAndExit(animationOverlay.Dispose())
+	var err error
+	animationOverlay, err = ebiten.NewImage(screenWidth, screenHeight, ebiten.FilterDefault)
+	logErrorAndExit(err)
+	// animationOverlay.Clear()
 	if !transitioning {
 		transitioning = true
 		animationTimer = animationDuration
@@ -222,7 +221,7 @@ func (g *Game) transitionLetter() {
 	} else if animationTimer > animationDuration/2 {
 		animationTimer -= 60
 	} else if animationTimer > 0 {
-		// fadeOut()
+		fadeOut()
 		animationTimer -= 60
 	} else {
 		transitioning = false
@@ -252,11 +251,11 @@ func (g *Game) loadRandomLetter() {
 // fadeOut draws an overlay with the color of the letter background
 // and opacity increasing from 0 to 1
 func fadeOut() {
-	// logErrorAndExit(sweep.Dispose())
-	// var err error
-	// sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
-	// logErrorAndExit(err)
-	sweep.Clear()
+	logErrorAndExit(sweep.Dispose())
+	var err error
+	sweep, err = ebiten.NewImage(2*screenWidth, 2*screenHeight, ebiten.FilterDefault)
+	logErrorAndExit(err)
+	// sweep.Clear()
 	ccolor := letterOverlay.At(0, 0).(color.RGBA)
 	sweep.Fill(ccolor)
 	op := &ebiten.DrawImageOptions{}
@@ -358,11 +357,10 @@ func (g *Game) renderDebugScreen(screen *ebiten.Image) {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	screenio.DrawImage(canvasImage, nil)
-	screenio.DrawImage(letterOverlay, nil)
-	screenio.DrawImage(animationOverlay, nil)
-	screenio.DrawImage(pointerOverlay, nil)
-	screen.DrawImage(screenio, nil)
+	screen.DrawImage(canvasImage, nil)
+	screen.DrawImage(letterOverlay, nil)
+	screen.DrawImage(animationOverlay, nil)
+	screen.DrawImage(pointerOverlay, nil)
 	if debugMode {
 		g.renderDebugScreen(screen)
 	}
