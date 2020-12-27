@@ -239,6 +239,7 @@ func (g *Game) loadRandomLetter() {
 	logErrorAndExit(canvasImage.Dispose())
 	canvasImage, _, err = ebitenutil.NewImageFromFile("./assets/img/sandpaper.jpg", ebiten.FilterDefault)
 	logErrorAndExit(err)
+	debugImage.Clear()
 	if letterPlayer.IsPlaying() {
 		letterPlayer.Rewind()
 		letterPlayer.Pause()
@@ -267,7 +268,7 @@ func fadeOut() {
 
 func (g *Game) generateDebugImage() {
 	for i := range g.letterPixels {
-		debugImage.Set(g.letterPixels[i].x, g.letterPixels[i].y, color.RGBA{0x40, 0xff, 0x40, 0xff})
+		debugImage.Set(g.letterPixels[i].x, g.letterPixels[i].y, color.RGBA{0xff, 0x00, 0x00, 0xff})
 	}
 }
 
@@ -326,7 +327,9 @@ func (g *Game) removeLetterPixels(x, y int) {
 		if !isUnderPointer(x, y, g.letterPixels[i]) {
 			newLetterPixels = append(newLetterPixels, g.letterPixels[i])
 		} else {
-			debugImage.Set(x, y, color.RGBA{0x40, 0x40, 0xff, 0xff})
+			pixelPos := g.letterPixels[i]
+			// Paint the traced pixels blue
+			debugImage.Set(pixelPos.x, pixelPos.y, color.RGBA{0x40, 0x40, 0xff, 0xff})
 		}
 	}
 	g.letterPixels = newLetterPixels
